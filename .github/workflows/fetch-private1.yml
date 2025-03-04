@@ -1,4 +1,4 @@
-name: Fetch Private Repo Files (Without Making Public)
+name: Debug Private Repo Cloning
 
 on: [push]
 
@@ -13,8 +13,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git clone https://$GITHUB_TOKEN@github.com/wtsyeda/wtsyeda_private.git private-folder
-          ls private-folder  # Just for verification
-      - name: Use Private Files (Optional)
+          git clone https://x-access-token:$GITHUB_TOKEN@github.com/wtsyeda/wtsyeda_private.git private-folder
+          echo "🔍 Listing files in private-folder:"
+          ls -la private-folder  # List all files for debugging
+
+      - name: Check If sensitive-data.txt Exists
         run: |
-          cat private-folder/sensitive-data.txt  # Use the file but DO NOT commit it
+          if [ -f private-folder/sensitive-data.txt ]; then
+            echo "✅ File exists: private-folder/sensitive-data.txt"
+            cat private-folder/sensitive-data.txt
+          else
+            echo "❌ ERROR: File not found: private-folder/sensitive-data.txt"
+            exit 1  # Fail the workflow if the file is missing
+          fi
