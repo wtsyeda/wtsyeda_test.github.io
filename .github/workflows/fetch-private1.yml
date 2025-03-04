@@ -1,0 +1,20 @@
+name: Fetch Private Repo Files (Without Making Public)
+
+on: [push]
+
+jobs:
+  fetch-private-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Public Repository
+        uses: actions/checkout@v3
+
+      - name: Clone Private Repository (Temporarily)
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git clone https://$GITHUB_TOKEN@github.com/wtsyeda/wtsyeda_private.git private-folder
+          ls private-folder  # Just for verification
+      - name: Use Private Files (Optional)
+        run: |
+          cat private-folder/sensitive-data.txt  # Use the file but DO NOT commit it
