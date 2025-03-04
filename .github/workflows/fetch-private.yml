@@ -1,4 +1,4 @@
-name: Fetch Private Repo Files (Without Making Public)
+name: Fetch Private Repo Files and Update README
 
 on: [push]
 
@@ -14,14 +14,23 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git clone https://x-access-token:$GITHUB_TOKEN@github.com/wtsyeda/wtsyeda_private.git private-folder
-          ls -la private-folder  # List files for debugging
+          echo "🔍 Listing files in private-folder:"
+          ls -la private-folder  # Debugging
 
-      - name: Use Private Files (Optional)
+      - name: Update README with Private Data
         run: |
-          if [ -f private-folder/sensitive-data.txt ]; then
-            cat private-folder/sensitive-data.txt  # Use the file but DO NOT commit it
-          else
-            echo "File not found: private-folder/sensitive-data.txt"
-            exit 1  # Fail the job if the file is missing
-          fi
+          echo "# My Publications" > README.md
+          echo "" >> README.md
+          echo "## Latest Updates" >> README.md
+          echo "" >> README.md
+          cat private-folder/sensitive-data.txt >> README.md  # Insert private data
+          echo "" >> README.md
+          echo "✅ README.md updated successfully!"
 
+      - name: Commit and Push Updated README
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add README.md
+          git commit -m "Updated README with private data"
+          git push origin main
