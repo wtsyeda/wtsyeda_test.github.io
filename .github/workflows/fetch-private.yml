@@ -17,20 +17,4 @@ jobs:
           echo "🔍 Listing files in private-folder:"
           ls -la private-folder  # Debugging
 
-      - name: Update README with Private Data
-        run: |
-          echo "# My Publications" > README.md
-          echo "" >> README.md
-          echo "## Latest Updates" >> README.md
-          echo "" >> README.md
-          cat private-folder/sensitive-data.txt >> README.md  # Insert private data
-          echo "" >> README.md
-          echo "✅ README.md updated successfully!"
-
-      - name: Commit and Push Updated README
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "actions@github.com"
-          git add README.md
-          git commit -m "Updated README with private data"
-          git push origin main
+      
