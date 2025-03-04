@@ -13,9 +13,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git clone https://$GITHUB_TOKEN@github.com/wtsyeda/wtsyeda_private private-folder
-          ls private-folder  # Just for verification
+          git clone https://x-access-token:$GITHUB_TOKEN@github.com/wtsyeda/wtsyeda_private.git private-folder
+          ls -la private-folder  # List files for debugging
 
       - name: Use Private Files (Optional)
         run: |
-          cat private-folder/sensitive-data.txt  # Use the file but DO NOT commit it
+          if [ -f private-folder/sensitive-data.txt ]; then
+            cat private-folder/sensitive-data.txt  # Use the file but DO NOT commit it
+          else
+            echo "File not found: private-folder/sensitive-data.txt"
+            exit 1  # Fail the job if the file is missing
+          fi
+
