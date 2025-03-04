@@ -13,7 +13,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git clone https://$GITHUB_TOKEN@github.com/wtsyeda/wtsyeda_private.git private-folder
+          git clone https://$GITHUB_TOKEN@github.com/wtsyeda/wtsyeda_private private-folder
           ls private-folder  # Just for verification
 
       - name: Use Private Files (Optional)
